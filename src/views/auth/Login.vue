@@ -1,245 +1,176 @@
-<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-const email = ref('')
-const password = ref('')
-const showPassword = ref(false)
-const rememberMe = ref(false)
-const errorMessage = ref('')
-const loading = ref(false)
-
-const login = async () => {
-  errorMessage.value = ''
-
-  if (!email.value || !password.value) {
-    errorMessage.value = 'Email dan password wajib diisi.'
-    return
-  }
-
-  loading.value = true
-
-  // Simulasi proses login
-  setTimeout(() => {
-    const adminEmail = 'admin@warungku.com'
-    const adminPassword = 'admin123'
-
-    if (
-      email.value === adminEmail &&
-      password.value === adminPassword
-    ) {
-      const adminData = {
-        id: 1,
-        name: 'Administrator',
-        email: adminEmail,
-        role: 'admin'
-      }
-
-      // Simpan data login
-      localStorage.setItem('isLoggedIn', 'true')
-      localStorage.setItem('user', JSON.stringify(adminData))
-
-      if (rememberMe.value) {
-        localStorage.setItem('rememberMe', 'true')
-      } else {
-        localStorage.removeItem('rememberMe')
-      }
-
-      router.push('/admin')
-    } else {
-      errorMessage.value = 'Email atau password salah.'
-    }
-
-    loading.value = false
-  }, 800)
-}
-</script>
-
 <template>
   <div class="login-page">
 
-    <!-- BAGIAN KIRI -->
-    <div class="login-brand">
+    <!-- ================= BAGIAN KIRI ================= -->
+    <div class="brand-section">
+
       <div class="brand-content">
 
-        <div class="brand-logo">
-          🏪
+        <!-- LOGO -->
+        <div class="logo-box">
+          <img
+            src="../../assets/logo.png"
+            alt="Logo Seka Warung"
+          />
         </div>
 
-        <h1>WARUNGKU</h1>
+        <!-- NAMA -->
+        <h1>Seka Warung</h1>
 
-        <p>
+        <p class="brand-description">
           Sistem manajemen warung yang sederhana,
-          cepat, dan mudah digunakan.
+          praktis, dan terorganisir.
         </p>
 
-        <div class="brand-features">
-          <div class="feature">
+        <!-- KEUNGGULAN -->
+        <div class="advantages">
+
+          <div class="advantage">
             <span>✓</span>
-            <p>Kelola produk dengan mudah</p>
+            <p>Pengelolaan produk lebih mudah</p>
           </div>
 
-          <div class="feature">
+          <div class="advantage">
             <span>✓</span>
-            <p>Pantau penjualan warung</p>
+            <p>Pencatatan transaksi yang terorganisir</p>
           </div>
 
-          <div class="feature">
+          <div class="advantage">
             <span>✓</span>
-            <p>Kelola pelanggan dan kategori</p>
+            <p>Pemantauan data warung dengan praktis</p>
           </div>
+
         </div>
 
       </div>
+
     </div>
 
-    <!-- BAGIAN KANAN -->
-    <div class="login-form-container">
 
-      <div class="login-card">
+    <!-- ================= BAGIAN KANAN ================= -->
+    <div class="form-section">
 
-        <div class="login-header">
-          <div class="mobile-logo">
-            🏪
-          </div>
+      <div class="form-container">
 
-          <h2>Selamat Datang 👋</h2>
+        <!-- HEADER -->
+        <div class="form-header">
 
-          <p>
-            Masuk ke panel admin WARUNGKU
+          <p class="small-title">
+            LOGIN ADMIN
           </p>
+
+          <h2>Selamat Datang</h2>
+
+          <p class="subtitle">
+            Masuk untuk mengelola data Seka Warung.
+          </p>
+
         </div>
 
-        <!-- ERROR -->
-        <div
-          v-if="errorMessage"
-          class="error-message"
-        >
-          <span>⚠️</span>
-          {{ errorMessage }}
-        </div>
 
+        <!-- FORM LOGIN -->
         <form @submit.prevent="login">
 
           <!-- EMAIL -->
           <div class="form-group">
-            <label for="email">
-              Email
-            </label>
 
-            <div class="input-wrapper">
-              <span class="input-icon">
-                ✉️
-              </span>
+            <label>Email</label>
 
-              <input
-                id="email"
-                v-model="email"
-                type="email"
-                placeholder="Masukkan email"
-                autocomplete="email"
-              />
-            </div>
+            <input
+              v-model="email"
+              type="email"
+              placeholder="Masukkan email"
+              required
+            />
+
           </div>
+
 
           <!-- PASSWORD -->
           <div class="form-group">
-            <label for="password">
-              Password
-            </label>
 
-            <div class="input-wrapper">
-              <span class="input-icon">
-                🔒
-              </span>
+            <label>Password</label>
+
+            <div class="password-wrapper">
 
               <input
-                id="password"
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
                 placeholder="Masukkan password"
-                autocomplete="current-password"
+                required
               />
 
               <button
                 type="button"
-                class="password-toggle"
+                class="show-password"
                 @click="showPassword = !showPassword"
               >
-                {{ showPassword ? '🙈' : '👁️' }}
+                {{ showPassword ? 'Sembunyikan' : 'Lihat' }}
               </button>
+
             </div>
+
           </div>
 
-          <!-- REMEMBER -->
+
+          <!-- REMEMBER + FORGOT -->
           <div class="login-options">
 
             <label class="remember">
+
               <input
                 v-model="rememberMe"
                 type="checkbox"
               />
 
-              <span>
-                Ingat saya
-              </span>
+              <span>Ingat saya</span>
+
             </label>
+
 
             <button
               type="button"
               class="forgot-password"
+              @click="forgotPassword"
             >
               Lupa password?
             </button>
 
           </div>
 
+
+          <!-- ERROR -->
+          <p
+            v-if="errorMessage"
+            class="error-message"
+          >
+            {{ errorMessage }}
+          </p>
+
+
           <!-- LOGIN BUTTON -->
           <button
             type="submit"
             class="login-button"
-            :disabled="loading"
           >
-            <span v-if="loading">
-              Memproses...
-            </span>
-
-            <span v-else>
-              Masuk ke Dashboard
-            </span>
+            Masuk ke Dashboard
           </button>
 
         </form>
 
+
         <!-- REGISTER -->
         <div class="register-link">
-          <span>Belum punya akun?</span>
+
+          <span>Belum memiliki akun?</span>
 
           <button
             type="button"
-            @click="router.push('/register')"
+            @click="goToRegister"
           >
             Daftar sekarang
           </button>
-        </div>
 
-        <!-- DEMO ACCOUNT -->
-        <div class="demo-account">
-          <div class="demo-title">
-            🔑 Akun Demo Admin
-          </div>
-
-          <div class="demo-item">
-            <span>Email</span>
-            <strong>admin@warungku.com</strong>
-          </div>
-
-          <div class="demo-item">
-            <span>Password</span>
-            <strong>admin123</strong>
-          </div>
         </div>
 
       </div>
@@ -249,380 +180,692 @@ const login = async () => {
   </div>
 </template>
 
+
+<script setup>
+
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+
+// =============================
+// DATA
+// =============================
+
+const email = ref('')
+const password = ref('')
+
+const rememberMe = ref(false)
+
+const showPassword = ref(false)
+
+const errorMessage = ref('')
+
+
+// =============================
+// LOGIN
+// =============================
+
+const login = () => {
+
+  errorMessage.value = ''
+
+  // Ambil data akun hasil register
+  const savedUser = localStorage.getItem('user')
+
+
+  // Kalau belum pernah register
+  if (!savedUser) {
+
+    errorMessage.value =
+      'Akun belum terdaftar. Silakan daftar terlebih dahulu.'
+
+    return
+  }
+
+
+  const user = JSON.parse(savedUser)
+
+
+  // Cek email
+  if (email.value !== user.email) {
+
+    errorMessage.value =
+      'Email tidak sesuai.'
+
+    return
+  }
+
+
+  // Cek password
+  if (password.value !== user.password) {
+
+    errorMessage.value =
+      'Password tidak sesuai.'
+
+    return
+  }
+
+
+  // Simpan status login
+  localStorage.setItem(
+    'isLoggedIn',
+    'true'
+  )
+
+
+  // Simpan email jika Ingat saya
+  if (rememberMe.value) {
+
+    localStorage.setItem(
+      'rememberedEmail',
+      email.value
+    )
+
+  } else {
+
+    localStorage.removeItem(
+      'rememberedEmail'
+    )
+
+  }
+
+
+  // Masuk ke dashboard
+  router.push('/admin')
+
+}
+
+
+// =============================
+// KE REGISTER
+// =============================
+
+const goToRegister = () => {
+
+  router.push('/register')
+
+}
+
+
+// =============================
+// LUPA PASSWORD
+// =============================
+
+const forgotPassword = () => {
+
+  alert(
+    'Silakan hubungi admin untuk mengatur ulang password.'
+  )
+
+}
+
+</script>
+
+
 <style scoped>
+
+/* ==============================
+   RESET
+============================== */
+
 * {
   box-sizing: border-box;
 }
 
+
+/* ==============================
+   HALAMAN
+============================== */
+
 .login-page {
   min-height: 100vh;
+
   display: flex;
-  background: #f5f7fb;
+
+  background: #fcfaf7;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  color: #302b28;
 }
 
-/* =========================
-   BRAND
-========================= */
 
-.login-brand {
-  width: 48%;
+/* ==============================
+   BAGIAN KIRI
+============================== */
+
+.brand-section {
+  width: 40%;
+
   min-height: 100vh;
+
+  background: #f1e3d5;
+
   display: flex;
+
   align-items: center;
-  justify-content: center;
-  padding: 60px;
-  background: linear-gradient(
-    145deg,
-    #ebb8c3,
-    #523acd
-  );
-  color: white;
+
+  padding: 60px 70px;
 }
+
 
 .brand-content {
-  width: 100%;
   max-width: 480px;
 }
 
-.brand-logo {
-  width: 72px;
-  height: 72px;
+
+/* ==============================
+   LOGO
+============================== */
+
+.logo-box {
+  width: 105px;
+  height: 105px;
+
+  background: #fffaf6;
+
+  border: 1px solid #eadbd0;
+
+  border-radius: 18px;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
-  margin-bottom: 28px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  font-size: 36px;
+
+  margin-bottom: 38px;
 }
+
+
+.logo-box img {
+  width: 78px;
+  height: 78px;
+
+  object-fit: contain;
+}
+
+
+/* ==============================
+   NAMA
+============================== */
 
 .brand-content h1 {
-  margin: 0 0 16px;
-  font-size: 42px;
-  font-weight: 800;
+  margin: 0 0 22px;
+
+  font-size: 45px;
+
+  font-weight: 700;
+
   letter-spacing: -1px;
+
+  color: #302b28;
 }
 
-.brand-content > p {
+
+/* ==============================
+   DESKRIPSI
+============================== */
+
+.brand-description {
+  margin: 0;
+
   max-width: 420px;
-  margin: 0;
-  color: #d1d5db;
-  font-size: 17px;
+
+  font-size: 18px;
+
   line-height: 1.7;
+
+  color: #655c57;
 }
 
-.brand-features {
-  margin-top: 48px;
+
+/* ==============================
+   KEUNGGULAN
+============================== */
+
+.advantages {
+  margin-top: 50px;
+
   display: flex;
+
   flex-direction: column;
-  gap: 20px;
+
+  gap: 25px;
 }
 
-.feature {
+
+.advantage {
   display: flex;
+
   align-items: center;
-  gap: 14px;
+
+  gap: 17px;
 }
 
-.feature span {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+.advantage span {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
   border-radius: 50%;
-  background: #2563eb;
-  font-size: 14px;
-}
 
-.feature p {
-  margin: 0;
-  color: #e5e7eb;
-  font-size: 15px;
-}
+  background: #d8899b;
 
-/* =========================
-   FORM CONTAINER
-========================= */
+  color: white;
 
-.login-form-container {
-  flex: 1;
-  min-height: 100vh;
   display: flex;
+
   align-items: center;
   justify-content: center;
-  padding: 40px;
+
+  font-size: 18px;
+
+  font-weight: bold;
 }
 
-.login-card {
-  width: 100%;
-  max-width: 460px;
-}
 
-.login-header {
-  margin-bottom: 30px;
-}
-
-.mobile-logo {
-  display: none;
-  margin-bottom: 20px;
-  font-size: 36px;
-}
-
-.login-header h2 {
-  margin: 0 0 8px;
-  color: #111827;
-  font-size: 30px;
-  font-weight: 750;
-}
-
-.login-header p {
+.advantage p {
   margin: 0;
-  color: #6b7280;
-  font-size: 15px;
+
+  font-size: 16px;
+
+  color: #443d39;
 }
 
-/* =========================
-   ERROR
-========================= */
 
-.error-message {
+/* ==============================
+   BAGIAN KANAN
+============================== */
+
+.form-section {
+  width: 60%;
+
+  min-height: 100vh;
+
   display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding: 13px 15px;
-  border: 1px solid #fecaca;
-  border-radius: 10px;
-  background: #fef2f2;
-  color: #dc2626;
-  font-size: 14px;
+
+  justify-content: center;
+
+  padding: 65px 70px;
 }
 
-/* =========================
+
+.form-container {
+  width: 100%;
+
+  max-width: 650px;
+}
+
+
+/* ==============================
+   HEADER
+============================== */
+
+.form-header {
+  margin-bottom: 42px;
+}
+
+
+.small-title {
+  margin: 0 0 12px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  color: #c8758a;
+}
+
+
+.form-header h2 {
+  margin: 0 0 14px;
+
+  font-size: 44px;
+
+  font-weight: 700;
+
+  color: #302b28;
+}
+
+
+.subtitle {
+  margin: 0;
+
+  font-size: 17px;
+
+  line-height: 1.6;
+
+  color: #716863;
+}
+
+
+/* ==============================
    FORM
-========================= */
+============================== */
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
+
 
 .form-group label {
   display: block;
-  margin-bottom: 8px;
-  color: #374151;
-  font-size: 14px;
-  font-weight: 600;
-}
 
-.input-wrapper {
-  position: relative;
-}
+  margin-bottom: 9px;
 
-.input-icon {
-  position: absolute;
-  top: 50%;
-  left: 15px;
-  transform: translateY(-50%);
   font-size: 16px;
+
+  font-weight: 600;
+
+  color: #302b28;
 }
 
-.input-wrapper input {
+
+.form-group input {
   width: 100%;
-  height: 50px;
-  padding: 0 48px;
-  border: 1px solid #d1d5db;
+
+  height: 58px;
+
+  padding: 0 18px;
+
+  border: 1px solid #d9cec7;
+
   border-radius: 10px;
+
+  background: #fffdfb;
+
+  font-size: 16px;
+
+  color: #302b28;
+
   outline: none;
-  background: white;
-  color: #111827;
-  font-size: 14px;
+
   transition: 0.2s;
 }
 
-.input-wrapper input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+
+.form-group input::placeholder {
+  color: #a59b95;
 }
 
-.password-toggle {
+
+.form-group input:focus {
+  border-color: #d8899b;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(216, 137, 155, 0.12);
+}
+
+
+/* ==============================
+   PASSWORD
+============================== */
+
+.password-wrapper {
+  position: relative;
+}
+
+
+.password-wrapper input {
+  padding-right: 120px;
+}
+
+
+.show-password {
   position: absolute;
+
+  right: 18px;
+
   top: 50%;
-  right: 14px;
-  padding: 4px;
-  border: none;
+
   transform: translateY(-50%);
+
+  border: none;
+
   background: transparent;
+
+  color: #b7657b;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
   cursor: pointer;
-  font-size: 16px;
 }
 
-/* =========================
+
+.show-password:hover {
+  color: #965064;
+}
+
+
+/* ==============================
    OPTIONS
-========================= */
+============================== */
 
 .login-options {
   display: flex;
-  align-items: center;
+
   justify-content: space-between;
-  margin: 6px 0 24px;
+
+  align-items: center;
+
+  margin-top: -5px;
+
+  margin-bottom: 25px;
 }
+
 
 .remember {
   display: flex;
+
   align-items: center;
+
   gap: 8px;
-  color: #4b5563;
-  font-size: 13px;
+
+  font-size: 14px;
+
+  color: #716863;
+
   cursor: pointer;
 }
+
 
 .remember input {
-  width: 15px;
-  height: 15px;
+  width: 16px;
+  height: 16px;
+
+  accent-color: #d8899b;
+
   cursor: pointer;
 }
 
+
 .forgot-password {
-  padding: 0;
   border: none;
+
   background: transparent;
-  color: #2563eb;
-  font-size: 13px;
+
+  padding: 0;
+
+  color: #b7657b;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
   cursor: pointer;
 }
+
 
 .forgot-password:hover {
   text-decoration: underline;
 }
 
-/* =========================
-   LOGIN BUTTON
-========================= */
+
+/* ==============================
+   ERROR
+============================== */
+
+.error-message {
+  margin: -5px 0 18px;
+
+  font-size: 14px;
+
+  color: #b34d5d;
+}
+
+
+/* ==============================
+   BUTTON
+============================== */
 
 .login-button {
   width: 100%;
-  height: 50px;
+
+  height: 58px;
+
   border: none;
+
   border-radius: 10px;
-  background: #2563eb;
+
+  background: #d8899b;
+
   color: white;
-  font-size: 14px;
-  font-weight: 650;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
   cursor: pointer;
+
   transition: 0.2s;
 }
 
+
 .login-button:hover {
-  background: #1d4ed8;
-  transform: translateY(-1px);
+  background: #c9788c;
 }
 
-.login-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
+
+.login-button:active {
+  transform: translateY(1px);
 }
 
-/* =========================
-   REGISTER
-========================= */
+
+/* ==============================
+   REGISTER LINK
+============================== */
 
 .register-link {
+  margin-top: 25px;
+
   display: flex;
-  align-items: center;
+
   justify-content: center;
-  gap: 5px;
-  margin-top: 24px;
-  color: #6b7280;
-  font-size: 13px;
+
+  align-items: center;
+
+  gap: 6px;
+
+  font-size: 14px;
+
+  color: #716863;
 }
 
+
 .register-link button {
-  padding: 0;
   border: none;
+
   background: transparent;
-  color: #2563eb;
-  font-size: 13px;
+
+  padding: 0;
+
+  color: #b7657b;
+
   font-weight: 600;
+
   cursor: pointer;
 }
+
 
 .register-link button:hover {
   text-decoration: underline;
 }
 
-/* =========================
-   DEMO
-========================= */
 
-.demo-account {
-  margin-top: 28px;
-  padding: 16px;
-  border: 1px dashed #bfdbfe;
-  border-radius: 10px;
-  background: #eff6ff;
-}
-
-.demo-title {
-  margin-bottom: 12px;
-  color: #1e40af;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.demo-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 7px;
-  color: #64748b;
-  font-size: 12px;
-}
-
-.demo-item strong {
-  color: #334155;
-  font-weight: 600;
-}
-
-/* =========================
+/* ==============================
    RESPONSIVE
-========================= */
+============================== */
 
-@media (max-width: 850px) {
-  .login-brand {
-    display: none;
+@media (max-width: 900px) {
+
+  .login-page {
+    flex-direction: column;
   }
 
-  .login-form-container {
-    min-height: 100vh;
-    padding: 30px 20px;
+
+  .brand-section {
+    width: 100%;
+
+    min-height: auto;
+
+    padding: 45px 30px;
   }
 
-  .mobile-logo {
-    display: block;
+
+  .brand-content {
+    max-width: 100%;
   }
 
-  .login-header h2 {
-    font-size: 26px;
+
+  .advantages {
+    margin-top: 30px;
   }
+
+
+  .form-section {
+    width: 100%;
+
+    padding: 45px 30px;
+  }
+
 }
 
-@media (max-width: 480px) {
-  .login-form-container {
-    padding: 24px 16px;
+
+@media (max-width: 500px) {
+
+  .brand-content h1 {
+    font-size: 36px;
   }
+
+
+  .form-header h2 {
+    font-size: 36px;
+  }
+
+
+  .form-section {
+    padding: 35px 22px;
+  }
+
 
   .login-options {
     align-items: flex-start;
-    flex-direction: column;
-    gap: 12px;
+
+    gap: 15px;
   }
 
-  .demo-item {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 3px;
-  }
 }
+
 </style>

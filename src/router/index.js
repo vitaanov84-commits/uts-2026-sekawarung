@@ -1,16 +1,33 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+// Layout
 import AdminLayout from '../layouts/AdminLayout.vue'
 
+// Admin Pages
 import Dashboard from '../views/admin/Dashboard.vue'
+import Produk from '../views/admin/Produk.vue'
+import Penjualan from '../views/admin/Penjualan.vue'
+import Pelanggan from '../views/admin/Pelanggan.vue'
+import Kategori from '../views/admin/Kategori.vue'
+import Laporan from '../views/admin/Laporan.vue'
+import Pengaturan from '../views/admin/Pengaturan.vue'
+
+// Auth Pages
 import Login from '../views/auth/Login.vue'
 import Register from '../views/auth/Register.vue'
 
+
 const routes = [
+
+  // =========================
+  // HOME
+  // =========================
+
   {
     path: '/',
     redirect: '/login'
   },
+
 
   // =========================
   // AUTH
@@ -28,6 +45,7 @@ const routes = [
     component: Register
   },
 
+
   // =========================
   // ADMIN
   // =========================
@@ -37,83 +55,78 @@ const routes = [
     component: AdminLayout,
 
     children: [
+
+      // Dashboard
       {
         path: '',
         name: 'admin-dashboard',
         component: Dashboard
       },
 
+      // Produk
       {
         path: 'produk',
         name: 'admin-produk',
-        component: {
-          template: `
-            <div style="padding: 30px">
-              <h1>Produk</h1>
-              <p>Halaman produk akan kita buat berikutnya.</p>
-            </div>
-          `
-        }
+        component: Produk
       },
 
+      // Penjualan
       {
         path: 'penjualan',
         name: 'admin-penjualan',
-        component: {
-          template: `
-            <div style="padding: 30px">
-              <h1>Penjualan</h1>
-              <p>Halaman penjualan akan kita buat berikutnya.</p>
-            </div>
-          `
-        }
+        component: Penjualan
       },
 
+      // Pelanggan
       {
         path: 'pelanggan',
         name: 'admin-pelanggan',
-        component: {
-          template: `
-            <div style="padding: 30px">
-              <h1>Pelanggan</h1>
-              <p>Halaman pelanggan akan kita buat berikutnya.</p>
-            </div>
-          `
-        }
+        component: Pelanggan
       },
 
+      // Kategori
       {
         path: 'kategori',
         name: 'admin-kategori',
-        component: {
-          template: `
-            <div style="padding: 30px">
-              <h1>Kategori</h1>
-              <p>Halaman kategori akan kita buat berikutnya.</p>
-            </div>
-          `
-        }
+        component: Kategori
       },
 
+      // Laporan
       {
         path: 'laporan',
         name: 'admin-laporan',
-        component: {
-          template: `
-            <div style="padding: 30px">
-              <h1>Laporan</h1>
-              <p>Halaman laporan akan kita buat berikutnya.</p>
-            </div>
-          `
-        }
+        component: Laporan
+      },
+      {
+        path: 'pengaturan',
+        name: 'admin-pengaturan',
+        component: Pengaturan
       }
     ]
+  },
+
+
+
+  // =========================
+  // DASHBOARD REDIRECT
+  // =========================
+
+  {
+    path: '/dashboard',
+    redirect: '/admin'
   }
+
 ]
+
+
+// =========================
+// CREATE ROUTER
+// =========================
 
 const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
 
 export default router

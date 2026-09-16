@@ -8,7 +8,7 @@ import AdminSidebar from '../components/AdminSidebar.vue'
     <!-- SIDEBAR -->
     <AdminSidebar />
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN -->
     <main class="admin-main">
 
       <!-- TOPBAR -->
@@ -20,7 +20,6 @@ import AdminSidebar from '../components/AdminSidebar.vue'
         </div>
 
         <div class="admin-profile">
-
           <div class="profile-avatar">
             A
           </div>
@@ -29,12 +28,11 @@ import AdminSidebar from '../components/AdminSidebar.vue'
             <strong>Admin Warung</strong>
             <span>Administrator</span>
           </div>
-
         </div>
 
       </header>
 
-      <!-- CONTENT -->
+      <!-- HALAMAN -->
       <section class="dashboard-content">
         <router-view />
       </section>
@@ -45,14 +43,17 @@ import AdminSidebar from '../components/AdminSidebar.vue'
 </template>
 
 <style scoped>
-/* =========================
-   ADMIN LAYOUT
-========================= */
+
+* {
+  box-sizing: border-box;
+}
 
 .admin-layout {
   min-height: 100vh;
   display: flex;
-  background: #f5f7fb;
+  background: #faf7f3;
+  color: #302b28;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* =========================
@@ -64,6 +65,7 @@ import AdminSidebar from '../components/AdminSidebar.vue'
   min-width: 0;
   min-height: 100vh;
   margin-left: 250px;
+  background: #faf7f3;
 }
 
 /* =========================
@@ -75,26 +77,28 @@ import AdminSidebar from '../components/AdminSidebar.vue'
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
-  border-bottom: 1px solid #e5e7eb;
-  background: #ffffff;
+
+  padding: 0 34px;
+
+  background: #fffdfb;
+  border-bottom: 1px solid #eadfd8;
 }
 
 .topbar-left h2 {
   margin: 0;
-  color: #faa3ea;
-  font-size: 22px;
+  color: #302b28;
+  font-size: 23px;
   font-weight: 700;
 }
 
 .topbar-left p {
-  margin: 5px 0 0;
-  color: #9ca3af;
+  margin: 6px 0 0;
+  color: #81766f;
   font-size: 13px;
 }
 
 /* =========================
-   ADMIN PROFILE
+   PROFILE
 ========================= */
 
 .admin-profile {
@@ -106,12 +110,16 @@ import AdminSidebar from '../components/AdminSidebar.vue'
 .profile-avatar {
   width: 42px;
   height: 42px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   border-radius: 50%;
-  background: #faa3ea;
+
+  background: #d98a9d;
   color: #ffffff;
+
   font-size: 15px;
   font-weight: 700;
 }
@@ -123,13 +131,13 @@ import AdminSidebar from '../components/AdminSidebar.vue'
 }
 
 .profile-info strong {
-  color: #faa3ea;
+  color: #302b28;
   font-size: 13px;
-  font-weight: 650;
+  font-weight: 700;
 }
 
 .profile-info span {
-  color: #9ca3af;
+  color: #8c817a;
   font-size: 11px;
 }
 
@@ -139,7 +147,8 @@ import AdminSidebar from '../components/AdminSidebar.vue'
 
 .dashboard-content {
   min-height: calc(100vh - 82px);
-  padding: 30px 32px;
+  padding: 30px 34px;
+  background: #faf7f3;
 }
 
 /* =========================
@@ -147,6 +156,7 @@ import AdminSidebar from '../components/AdminSidebar.vue'
 ========================= */
 
 @media (max-width: 900px) {
+
   .admin-main {
     margin-left: 0;
   }
@@ -161,6 +171,7 @@ import AdminSidebar from '../components/AdminSidebar.vue'
 }
 
 @media (max-width: 600px) {
+
   .topbar {
     height: auto;
     min-height: 76px;
@@ -188,4 +199,5 @@ import AdminSidebar from '../components/AdminSidebar.vue'
     padding: 20px 16px;
   }
 }
+
 </style>
